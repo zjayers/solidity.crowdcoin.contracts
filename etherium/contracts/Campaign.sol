@@ -37,7 +37,7 @@ contract Campaign {
     address public manager;
     mapping(address => bool) public contributors;
     uint256 public minimumContribution;
-    uint256 approversCount;
+    uint256 public approversCount;
     SpendingRequest[] public spendingRequests;
 
     // Modifiers
@@ -111,5 +111,29 @@ contract Campaign {
         // Complete the transaction
         request.recipient.transfer(request.value);
         request.complete = true;
+    }
+
+    function getSummary()
+        public
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            address
+        )
+    {
+        return (
+            minimumContribution,
+            this.balance,
+            spendingRequests.length,
+            approversCount,
+            manager
+        );
+    }
+
+    function getRequestsCount() public view returns (uint256) {
+        return spendingRequests.length;
     }
 }
